@@ -4,34 +4,12 @@ $(function () {
   });
   $('input[type="text"]').keypress(function (e) {
     if (e.which == 13) {
-      console.log('enter');
-
       getImdbData();
       return false;
     }
   });
   $(document).on('click ', '#search-button', getImdbData);
 });
-
-
-
-// Grid/List buttons
-var $gridButton = jQuery('a.view.grid');
-var $listButton = jQuery('a.view.list');
-var $items = jQuery('ul.view-as');
-
-$listButton.on('click', function () {
-  $gridButton.removeClass('on');
-  $listButton.addClass('on');
-  $items.removeClass('grid').addClass('list');
-});
-
-$gridButton.on('click', function () {
-  $listButton.removeClass('on');
-  $gridButton.addClass('on');
-  $items.removeClass('list').addClass('grid');
-});
-// End 
 
 var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
 
@@ -41,21 +19,17 @@ function getImdbData() {
   let title = arrayOfStrings.join('+');
   let movieTitle = '&query=' + title;
   let movieYear = '&y=' + $('#movieYear').val();
-  console.log(movieYear, titleMovie);
-
   let urlmoviedb = 'https://api.themoviedb.org/3/search/movie?' + apiKeyMovieDb + movieTitle;
   console.log(urlmoviedb);
 
   $('.posters-container ul.view-as').html('');
-  $('.toggle').css('display', 'block');
 
   $.getJSON(urlmoviedb, function (response) {
-    // console.log(response);
     if (response) {
       let data = response.results;
-
+      console.log(data);
+      
       $.each(data, function (index, object) {
-        // console.log(index, object);
         if (object.poster_path) {
           fillTheHtml(object);
         }
@@ -65,26 +39,28 @@ function getImdbData() {
 }
 
 function fillTheHtml(object) {
+
   let url = 'https://api.themoviedb.org/3/movie/' + object.id + '?' + apiKeyMovieDb;
 
   $.getJSON(url, function (response) {
-    // console.log(response);
     let imdbId = '';
     if (response) {
       imdbId = response.imdb_id;
     }
-    let linkToImdbMovie = imdbId ? 'https://www.imdb.com/title/' + imdbId : '#';
+    let handledMovieTitle = handleMovieTitle(object.title, 42);
+    let handleMovieOverview = handleMovieTitle(object.overview, 280);
+    let linkToImdbSite = imdbId ? 'https://www.imdb.com/title/' + imdbId : '#';
     let movieContainer = '<li>' +
       '<div class="wrapper">' +
       '<div class="container">' +
       '<div class="top">' +
-      '<a href="' + linkToImdbMovie + '" target="_blank">' +
+      '<a href="' + linkToImdbSite + '" target="_blank">' +
       '<img src="http://image.tmdb.org/t/p/w185' + object.poster_path + '" alt="">' +
       '</a>' +
       '</div>' +
       '<div class="bottom">' +
-      '<div class="details">' +
-      '<h5>' + object.title + '</h5>' +
+      '<div class="details"  title="' + handledMovieTitle + '">' +
+      '<h5 class="title-movie">' + handledMovieTitle + '</h5>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -92,15 +68,22 @@ function fillTheHtml(object) {
       '<div class="icon"><i class="fa fa-info-circle fa-2x"></i></div>' +
       '<div class="contents">' +
       '<table>' +
-      '<tr>' +
-      '<th>Width</th>' +
-      '<th>Height</th>' +
+      '<tr class="tr-head">' +
+      '<th>Year</th>' +
+      '<th>Imdb Raiting</th>' +
       '</tr>' +
       '<tr>' +
-      '<td>3000mm</td>' +
-      '<td>4000mm</td>' +
+      '<td>' + object.release_date + '</td>' +
+      '<td>' +
+      '<div class="imdbRatingStyle">' +
+      '<span>' +
+      '<img src="https://ia.media-imdb.com/images/G/01/imdb/plugins/rating/images/imdb_38x18.png" alt=""/>' +
+      '<span class="rating">' + object.vote_average + '<span class="ofTen">/10</span></span>' +
+      '</span>' +
+      '</div>' +
+      '</td>' +
       '</tr>' +
-      '<tr>' +
+      '<tr class="tr-head">' +
       '<th>Something</th>' +
       '<th>Something</th>' +
       '</tr>' +
@@ -108,13 +91,11 @@ function fillTheHtml(object) {
       '<td>200mm</td>' +
       '<td>200mm</td>' +
       '</tr>' +
-      '<tr>' +
-      '<th>Something</th>' +
-      '<th>Something</th>' +
+      '<tr class="tr-head">' +
+      '<th colspan="2">Movie Overview</th>' +
       '</tr>' +
-      '<tr>' +
-      '<td>200mm</td>' +
-      '<td>200mm</td>' +
+      '<tr class="overview" title="'+ handleMovieOverview +'">' +
+      '<td class="overview" colspan="2">'+ handleMovieOverview +'</td>' +
       '</tr>' +
       '</table>' +
       '</div>' +
@@ -123,8 +104,19 @@ function fillTheHtml(object) {
       '</li>';
     $('.posters-container ul.view-as').append(movieContainer);
   });
-
 }
+
+function handleMovieTitle(title, maxLength) {
+  let max = maxLength;
+  let tot, str;
+
+  str = typeof title !== "undefined" ? title : '';
+  tot = str.length;
+  str = (tot <= max) ? str : str.substring(0, (max + 1)) + "...";
+
+  return str;
+}
+
 
 
 
