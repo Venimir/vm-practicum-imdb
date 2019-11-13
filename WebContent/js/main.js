@@ -15,8 +15,9 @@ $(function () {
 
   $(document).on('click ', '#search-button', getImdbData);
 
-  populateSelectWithYears(true);
-  populateSelectWithYears();
+  populateSelectYearsRaiting(true);
+  populateSelectYearsRaiting();
+  populateFilterGenres();
 });
 // END Document ready
 
@@ -118,16 +119,16 @@ function fillTheHtml(object) {
 }
 
 function changeFilters() {
-    $(this).parent().find( 'li.active' ).removeClass( 'active' );
-    $(this).addClass( 'active' );
-    
-    if ($(this).attr('id') == "tv-series") {
-      $('#movie-filters').addClass('hidden');
-      $('#tv-series-filters').removeClass('hidden');
-    } else {
-      $('#tv-series-filters').addClass('hidden');
-      $('#movie-filters').removeClass('hidden');
-    }
+  $(this).parent().find('li.active').removeClass('active');
+  $(this).addClass('active');
+
+  if ($(this).attr('id') == "tv-series") {
+    $('#movie-filters').addClass('hidden');
+    $('#tv-series-filters').removeClass('hidden');
+  } else {
+    $('#tv-series-filters').addClass('hidden');
+    $('#movie-filters').removeClass('hidden');
+  }
 }
 
 function handleMovieTitle(title, maxLength) {
@@ -141,7 +142,7 @@ function handleMovieTitle(title, maxLength) {
   return str;
 }
 
-function populateSelectWithYears(years = false) {
+function populateSelectYearsRaiting(years = false) {
 
   let html = '';
   let iStart = ''
@@ -161,8 +162,20 @@ function populateSelectWithYears(years = false) {
   for (var i = iStart; i >= iEnd; i--) {
     html += '<option class="dropdown-item" value="' + i + '">' + i + '</option>';
   }
-  
+
   $(selectId).html(html);
+}
+
+function populateFilterGenres() {
+  let html = '';
+  let url = 'https://api.themoviedb.org/3/genre/movie/list?api_key=2ec82d3fc6c5da1102cd5979cf39b152&language=en-US';
+  $.getJSON(url, (response) => {
+    let data = response.genres;
+    data.forEach((object, index) => {
+      html += '<option class="dropdown-item" value="' + object.id + '">' + object.name + '</option>';
+    });
+    $('#filter-genre').html(html);
+  });
 }
 
 
