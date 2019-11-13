@@ -10,6 +10,7 @@ $(function () {
   });
   $(document).on('click ', '#search-button', getImdbData);
 });
+// END Document ready
 
 var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
 
