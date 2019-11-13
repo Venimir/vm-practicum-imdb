@@ -27,35 +27,87 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto mr-5">
-                        <li class="nav-item active">
+                        <li id="movies" class="nav-item active">
                             <a class="nav-link" href="#"><i class="fa fa-film fa-lg"></i>&nbsp;Movies
                                 <span class="sr-only">(current)</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li id="tv-series" class="nav-item">
                             <a class="nav-link" href="#"><i class="fa fa-tv fa-lg"></i>&nbsp;Tv Series</a>
                         </li>
                     </ul>
                 </div>
             </nav>
         </div>
+        <!-- END Nav container -->
+        <!-- FILTERS -->
+        <div class="d-flex justify-content-center filters-container mt-5">
+            <div id="movie-filters" class="d-flex justify-content-center">
+                <div class="bd-highlight mr-2">
+                    <label for="movieTitle">Movie Title</label>
+                    <input type="text" class="form-control flex-item" id="movieTitle" placeholder="Enter Movie Title"
+                        value="" />
+                </div>
+                <div class="dropdown align-self-end ml-2 mr-2">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                        Movie Year
+                    </button>
+                    <div id="movieYear" class="year dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                        <!-- dropdown options will be populated when page is loaded -->
+                    </div>
+                </div>
+                <div class="dropdown align-self-end ml-2 mr-5">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                        Sort by Raiting
+                    </button>
+                    <div id="movieImdbRaiting" class="imdbRaiting dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                        <!-- dropdown options will be populated when page is loaded -->
+                    </div>
+                </div>
+            </div>
 
-        <div class="flex-container mb-4 mt-4">
-            <div class="flex-column mr-1">
-                <label for="movieTitle">Movie Title</label>
-                <input type="text" class="form-control flex-item" id="movieTitle" placeholder="Enter Movie Title"
-                    value="" />
+            <div id="tv-series-filters" class="d-flex justify-content-center hidden">
+                <div class="bd-highlight mr-2">
+                    <label for="tvSerieTitle">TV Serie Title</label>
+                    <input type="text" class="form-control flex-item" id="tvSerieTitle"
+                        placeholder="Enter Tv Serie Title" value="" />
+                </div>
+                <div class="bd-highlight ml-2 mr-2">
+                    <label for="tvSerieSeason">Search Tv Serie by Season</label>
+                    <input type="number" class="form-control flex-item" id="tvSerieSeason"
+                        placeholder="Enter number of season" value="" />
+                </div>
+                <div class="dropdown align-self-end ml-2 mr-2">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                        Movie Year
+                    </button>
+                    <div id="serieYear" class="year dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                        <!-- dropdown options will be populated when page is loaded -->
+                    </div>
+                </div>
+                <div class="dropdown align-self-end mr-5 ml-2">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                        Sort by Raiting
+                    </button>
+                    <div id="serieImdbRaiting" class="imdbRaiting dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                        <!-- dropdown options will be populated when page is loaded -->
+                    </div>
+                </div>
             </div>
-            <div class="flex-column ml-1">
-                <label for="movieYear">Movie Year</label>
-                <input type="text" class="form-control flex-item" id="movieYear" placeholder="Enter Movie Year"
-                    value="" />
-            </div>
-            <div class="flex-column mt-4 ml-2">
+
+            <!-- Search Button  -->
+            <div class="align-self-end bd-highlight ml-2">
                 <button type="button" class="btn btn-primary " id="search-button"><i
                         class="fa fa-search mr-1"></i>Search</button>
             </div>
         </div>
+
+
+
 
         <div class="posters-container">
             <!-- <div class="toggle">
@@ -66,7 +118,7 @@
                     </a></p>
             </div> -->
             <ul class="view-as grid">
-            <!-- posters interate  -->
+                <!-- posters interate  -->
             </ul>
         </div>
     </div>
@@ -78,8 +130,6 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="js/main.js"></script>
-    
-    
 
 </body>
 

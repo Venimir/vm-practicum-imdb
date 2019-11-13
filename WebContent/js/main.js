@@ -1,16 +1,26 @@
 $(function () {
+
+  $('ul.navbar-nav li').on('click', changeFilters);
+
   $('input[type="text"]').focus(function () {
     this.value = "";
   });
+
   $('input[type="text"]').keypress(function (e) {
     if (e.which == 13) {
       getImdbData();
       return false;
     }
   });
+
   $(document).on('click ', '#search-button', getImdbData);
+
+  populateSelectWithYears(true);
+  populateSelectWithYears();
 });
 // END Document ready
+
+// END Document Ready
 
 var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
 
@@ -29,7 +39,7 @@ function getImdbData() {
     if (response) {
       let data = response.results;
       console.log(data);
-      
+
       $.each(data, function (index, object) {
         if (object.poster_path) {
           fillTheHtml(object);
@@ -95,8 +105,8 @@ function fillTheHtml(object) {
       '<tr class="tr-head">' +
       '<th colspan="2">Movie Overview</th>' +
       '</tr>' +
-      '<tr class="overview" title="'+ handleMovieOverview +'">' +
-      '<td class="overview" colspan="2">'+ handleMovieOverview +'</td>' +
+      '<tr class="overview" title="' + handleMovieOverview + '">' +
+      '<td class="overview" colspan="2">' + handleMovieOverview + '</td>' +
       '</tr>' +
       '</table>' +
       '</div>' +
@@ -105,6 +115,19 @@ function fillTheHtml(object) {
       '</li>';
     $('.posters-container ul.view-as').append(movieContainer);
   });
+}
+
+function changeFilters() {
+    $(this).parent().find( 'li.active' ).removeClass( 'active' );
+    $(this).addClass( 'active' );
+    
+    if ($(this).attr('id') == "tv-series") {
+      $('#movie-filters').addClass('hidden');
+      $('#tv-series-filters').removeClass('hidden');
+    } else {
+      $('#tv-series-filters').addClass('hidden');
+      $('#movie-filters').removeClass('hidden');
+    }
 }
 
 function handleMovieTitle(title, maxLength) {
@@ -117,6 +140,32 @@ function handleMovieTitle(title, maxLength) {
 
   return str;
 }
+
+function populateSelectWithYears(years = false) {
+
+  let html = '';
+  let iStart = ''
+  let iEnd = '';
+  let selectId = '';
+
+  if (years) {
+    iStart = new Date().getFullYear();
+    iEnd = 1960
+    selectId = '.year'
+  } else {
+    iStart = 10;
+    iEnd = 1
+    selectId = '.imdbRaiting';
+  }
+
+  for (var i = iStart; i >= iEnd; i--) {
+    html += '<option class="dropdown-item" value="' + i + '">' + i + '</option>';
+  }
+  
+  $(selectId).html(html);
+}
+
+
 
 
 
