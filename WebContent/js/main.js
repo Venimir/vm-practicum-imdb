@@ -13,6 +13,11 @@ $(function () {
     }
   });
 
+  $('#additionalOptions').on('change', function () {
+    console.log('sdfsdfds');
+    
+  });
+
   $(document).on('click ', '#search-button', getImdbData);
 
   populateSelectYearsRaiting(true);
@@ -131,17 +136,6 @@ function changeFilters() {
   }
 }
 
-function handleMovieTitle(title, maxLength) {
-  let max = maxLength;
-  let tot, str;
-
-  str = typeof title !== "undefined" ? title : '';
-  tot = str.length;
-  str = (tot <= max) ? str : str.substring(0, (max + 1)) + "...";
-
-  return str;
-}
-
 function populateSelectYearsRaiting(years = false) {
 
   let html = '';
@@ -152,11 +146,11 @@ function populateSelectYearsRaiting(years = false) {
   if (years) {
     iStart = new Date().getFullYear();
     iEnd = 1960
-    selectId = '.year'
+    selectId = '#filter-year'
   } else {
     iStart = 10;
     iEnd = 1
-    selectId = '.imdbRaiting';
+    selectId = '#filter-imdbRaiting';
   }
 
   for (var i = iStart; i >= iEnd; i--) {
@@ -176,6 +170,14 @@ function populateFilterGenres() {
     });
     $('#filter-genre').html(html);
   });
+}
+function sortBy() {
+  console.log('sdfsdfds');
+  
+  let elementId = $(this).attr('id');
+  let selectedOPtion = $(this).val();
+  console.log(selectedOPtion, elementId);
+  
 }
 
 

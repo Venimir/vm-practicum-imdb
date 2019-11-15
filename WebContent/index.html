@@ -48,24 +48,6 @@
                     <input type="text" class="form-control flex-item" id="movieTitle" placeholder="Enter Movie Title"
                         value="" />
                 </div>
-                <div class="dropdown align-self-end ml-2 mr-2">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
-                        Movie Year
-                    </button>
-                    <div id="movieYear" class="year dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                        <!-- dropdown options will be populated when page is loaded -->
-                    </div>
-                </div>
-                <div class="dropdown align-self-end ml-2 mr-2">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
-                        Sort by Raiting
-                    </button>
-                    <div id="movieImdbRaiting" class="imdbRaiting dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                        <!-- dropdown options will be populated when page is loaded -->
-                    </div>
-                </div>
             </div>
 
             <div id="tv-series-filters" class="d-flex justify-content-center hidden">
@@ -79,26 +61,39 @@
                     <input type="number" class="form-control flex-item" id="tvSerieSeason"
                         placeholder="Enter number of season" value="" />
                 </div>
-                <div class="dropdown align-self-end ml-2 mr-2">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
-                        Movie Year
-                    </button>
-                    <div id="serieYear" class="year dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                        <!-- dropdown options will be populated when page is loaded -->
-                    </div>
-                </div>
-                <div class="dropdown align-self-end mr-2 ml-2">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
-                        Sort by Raiting
-                    </button>
-                    <div id="serieImdbRaiting" class="imdbRaiting dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                        <!-- dropdown options will be populated when page is loaded -->
-                    </div>
+             
+            </div>
+            <!-- Filter dropdowns -->
+            <div class="form-group">
+                <select class="form-control dropdown" name="additionalOptions" id="additionalOptions" placeholder="Additional Options">
+                    <option value="">Select an option...</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                    <option value="5">Option 5</option>
+                </select>
+            </div>
+            <div class="dropdown align-self-end ml-2 mr-2">
+                <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                    Sort by Year
+                </button>
+                <div id="" class="filter-year dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                    <!-- dropdown options will be populated when page is loaded -->
                 </div>
             </div>
-            <!-- Filter genre -->
+            <div class="dropdown align-self-end mr-2 ml-2">
+                <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
+                    Sort by Raiting
+                </button>
+                <div id="filter-imdbRaiting" class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+                    <!-- dropdown options will be populated when page is loaded -->
+                </div>
+            </div>
+
+
             <div class="dropdown align-self-end ml-2 mr-5">
                 <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="10,20">
