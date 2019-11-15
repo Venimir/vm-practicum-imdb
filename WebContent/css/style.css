@@ -11,10 +11,14 @@ body {
 	border: 1px solid #777777;
 }
 
-.dropdown-menu {
-   height: 200px;
-   overflow: auto;
+.input-group {
+	width: 20%;
 }
+
+.dropdown-menu {
+	max-height: 200px;
+ }
+ 
 
 .nav-container {
 	box-shadow: 1px 10px 15px 1px rgba(0, 0, 0, 0.75);

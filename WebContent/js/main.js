@@ -1,5 +1,7 @@
 $(function () {
 
+  // $('.selectpicker').selectpicker('refresh');
+  
   $('ul.navbar-nav li').on('click', changeFilters);
 
   $('input[type="text"]').focus(function () {
@@ -13,9 +15,13 @@ $(function () {
     }
   });
 
-  $('#additionalOptions').on('change', function () {
-    console.log('sdfsdfds');
-    
+  $('.selectpicker').on('change', function(){
+    var selected = []; 
+    $(this).find("option:selected").each(function(key,value){
+        selected.push(value.innerHTML); 
+    });
+   console.log(selected);
+   
   });
 
   $(document).on('click ', '#search-button', getImdbData);
@@ -24,8 +30,6 @@ $(function () {
   populateSelectYearsRaiting();
   populateFilterGenres();
 });
-// END Document ready
-
 // END Document Ready
 
 var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
@@ -138,26 +142,26 @@ function changeFilters() {
 
 function populateSelectYearsRaiting(years = false) {
 
-  let html = '';
+  let html = '<option selected>Choose...</option>';
   let iStart = ''
   let iEnd = '';
-  let selectId = '';
+  let selectClass = '';
 
   if (years) {
     iStart = new Date().getFullYear();
     iEnd = 1960
-    selectId = '#filter-year'
+    selectClass = '.filter-year'
   } else {
     iStart = 10;
     iEnd = 1
-    selectId = '#filter-imdbRaiting';
+    selectClass = '.filter-imdbRaiting';
   }
 
   for (var i = iStart; i >= iEnd; i--) {
-    html += '<option class="dropdown-item" value="' + i + '">' + i + '</option>';
+    html += '<option value="' + i + '">' + i + '</option><br>';
   }
-
-  $(selectId).html(html);
+  
+  $(selectClass).html(html);
 }
 
 function populateFilterGenres() {
@@ -166,9 +170,11 @@ function populateFilterGenres() {
   $.getJSON(url, (response) => {
     let data = response.genres;
     data.forEach((object, index) => {
-      html += '<option class="dropdown-item" value="' + object.id + '">' + object.name + '</option>';
+      html += '<option value="' + object.id + '">' + object.name + '</option>';
     });
-    $('#filter-genre').html(html);
+   
+    $('.selectpicker').html(html);
+   
   });
 }
 function sortBy() {
