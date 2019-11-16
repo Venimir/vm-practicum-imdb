@@ -1,7 +1,7 @@
 $(function () {
 
   // $('.selectpicker').selectpicker('refresh');
-  
+
   $('ul.navbar-nav li').on('click', changeFilters);
 
   $('input[type="text"]').focus(function () {
@@ -15,14 +15,11 @@ $(function () {
     }
   });
 
-  $('.selectpicker').on('change', function(){
-    var selected = []; 
-    $(this).find("option:selected").each(function(key,value){
-        selected.push(value.innerHTML); 
-    });
-   console.log(selected);
-   
-  });
+  $('.filter-year').on('change', sortBy);
+
+  $('.filter-imdbRaiting').on('change', sortBy);
+
+  $('.selectpicker').on('change', sortBy);
 
   $(document).on('click ', '#search-button', getImdbData);
 
@@ -160,7 +157,7 @@ function populateSelectYearsRaiting(years = false) {
   for (var i = iStart; i >= iEnd; i--) {
     html += '<option value="' + i + '">' + i + '</option><br>';
   }
-  
+
   $(selectClass).html(html);
 }
 
@@ -172,18 +169,41 @@ function populateFilterGenres() {
     data.forEach((object, index) => {
       html += '<option value="' + object.id + '">' + object.name + '</option>';
     });
-   
+
     $('.selectpicker').html(html);
-   
+
   });
 }
+
+function sortByGenres() {
+  let selected = [];
+  let url = '';
+  $(this).find("option:selected").each(function (key, value) {
+    selected.push(value.innerHTML);
+  });
+  console.log(selected);
+  url = 'genre';
+
+  return url;
+}
+
 function sortBy() {
-  console.log('sdfsdfds');
-  
-  let elementId = $(this).attr('id');
+  let url = '';
   let selectedOPtion = $(this).val();
-  console.log(selectedOPtion, elementId);
-  
+  let activeTab = $('.navbar-nav').find('li.active');
+  let filterType = activeTab.attr('id');
+
+  if ($(this).hasClass('filter-year')) {
+    url = 'https://api.themoviedb.org/3/discover/movie?'+ apiKeyMovieDb +'&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=50&primary_release_year=' + selectedOPtion;
+  } else if ($(this).hasClass('filter-imdbRaiting')) {
+    url = 'https://api.themoviedb.org/3/discover/movie?' + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=20&vote_average.lte=' + selectedOPtion;
+  }
+  console.log(url, selectedOPtion);
+
+  $.getJSON(url, function(response) {
+
+  });
+ 
 }
 
 
