@@ -19,7 +19,7 @@ $(function () {
 
   $('.filter-imdbRaiting').on('change', sortBy);
 
-  $('.selectpicker').on('change', sortBy);
+  $('.selectpicker').on('change', sortByGenres);
 
   $(document).on('click ', '#search-button', getImdbData);
 
@@ -33,11 +33,16 @@ var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
 
 function getImdbData() {
   let titleMovie = $('#movieTitle').val();
-  let arrayOfStrings = titleMovie.split(' ');
-  let title = arrayOfStrings.join('+');
-  let movieTitle = '&query=' + title;
-  let movieYear = '&y=' + $('#movieYear').val();
-  let urlmoviedb = 'https://api.themoviedb.org/3/search/movie?' + apiKeyMovieDb + movieTitle;
+  let titleTv = $('#tvSerieTitle').val();
+  let temporaryTitle = titleMovie ? titleMovie : titleTv;
+  let arrayOfStrings = temporaryTitle.split(' ');
+  let stringTitle = arrayOfStrings.join('+');
+  let handledTitle = '&query=' + stringTitle;
+  let tvSeasonNumber = $('#tvSerieSeason').val();
+  let linkType = getLinkType(true);
+  let pageResults = linkType == 'tv?' && tvSeasonNumber ? '&page=1' : '';
+
+  let urlmoviedb = 'https://api.themoviedb.org/3/search/' + linkType + apiKeyMovieDb + handledTitle + pageResults;
   console.log(urlmoviedb);
 
   $('.posters-container ul.view-as').html('');
@@ -45,7 +50,7 @@ function getImdbData() {
   $.getJSON(urlmoviedb, function (response) {
     if (response) {
       let data = response.results;
-      console.log(data);
+      console.log(data[0]);
 
       $.each(data, function (index, object) {
         if (object.poster_path) {
@@ -56,16 +61,28 @@ function getImdbData() {
   });
 }
 
+function getDataById(object) {
+  let linkType = getLinkType();
+  let url = 'https://api.themoviedb.org/3/' + linkType + '/' + object.id + '?' + apiKeyMovieDb;
+  $.getJSON(url, function(response) {
+    return response;
+  });
+}
+
 function fillTheHtml(object) {
+  // let linkType = getLinkType();
+  // let url = 'https://api.themoviedb.org/3/' + linkType + '/' + object.id + '?' + apiKeyMovieDb;
+  let title = object.title ? object.title : object.name;
+  let year = object.release_date ? object.release_date : object.first_air_date;
 
-  let url = 'https://api.themoviedb.org/3/movie/' + object.id + '?' + apiKeyMovieDb;
-
-  $.getJSON(url, function (response) {
+  // $.getJSON(url, function (response) {
     let imdbId = '';
+    let response = getDataById(object)
     if (response) {
       imdbId = response.imdb_id;
     }
-    let handledMovieTitle = handleMovieTitle(object.title, 42);
+
+    let handledMovieTitle = handleMovieTitle(title, 42);
     let handleMovieOverview = handleMovieTitle(object.overview, 280);
     let linkToImdbSite = imdbId ? 'https://www.imdb.com/title/' + imdbId : '#';
     let movieContainer = '<li>' +
@@ -91,7 +108,7 @@ function fillTheHtml(object) {
       '<th>Imdb Raiting</th>' +
       '</tr>' +
       '<tr>' +
-      '<td>' + object.release_date + '</td>' +
+      '<td>' + year + '</td>' +
       '<td>' +
       '<div class="imdbRatingStyle">' +
       '<span>' +
@@ -121,7 +138,7 @@ function fillTheHtml(object) {
       '</div>' +
       '</li>';
     $('.posters-container ul.view-as').append(movieContainer);
-  });
+  // });
 }
 
 function changeFilters() {
@@ -135,6 +152,17 @@ function changeFilters() {
     $('#tv-series-filters').addClass('hidden');
     $('#movie-filters').removeClass('hidden');
   }
+}
+
+function handleMovieTitle(title, maxLength) {
+  let max = maxLength;
+  let tot, str;
+
+  str = typeof title !== "undefined" ? title : '';
+  tot = str.length;
+  str = (tot <= max) ? str : str.substring(0, (max + 1)) + "...";
+
+  return str;
 }
 
 function populateSelectYearsRaiting(years = false) {
@@ -177,33 +205,68 @@ function populateFilterGenres() {
 
 function sortByGenres() {
   let selected = [];
-  let url = '';
+
   $(this).find("option:selected").each(function (key, value) {
     selected.push(value.innerHTML);
   });
   console.log(selected);
-  url = 'genre';
+
+  let url = getUrl();
 
   return url;
 }
 
 function sortBy() {
-  let url = '';
+
   let selectedOPtion = $(this).val();
-  let activeTab = $('.navbar-nav').find('li.active');
-  let filterType = activeTab.attr('id');
+  let filter = '';
 
   if ($(this).hasClass('filter-year')) {
-    url = 'https://api.themoviedb.org/3/discover/movie?'+ apiKeyMovieDb +'&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=50&primary_release_year=' + selectedOPtion;
+    filter = 'year';
   } else if ($(this).hasClass('filter-imdbRaiting')) {
-    url = 'https://api.themoviedb.org/3/discover/movie?' + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=20&vote_average.lte=' + selectedOPtion;
+    filter = 'raiting';
+  } else {
+    filter = 'genres'
   }
-  console.log(url, selectedOPtion);
 
-  $.getJSON(url, function(response) {
+  let url = getUrl(selectedOPtion, filter);
 
-  });
- 
+  console.log(url);
+  console.log(selectedOPtion);
+
+  // $.getJSON(url, function(response) {
+
+  // });
+
+}
+
+function getLinkType(symbol = false) {
+  let activeTab = $('.navbar-nav').find('li.active');
+  let filterType = activeTab.attr('id');
+  let questionSymbol = symbol ? '?' : '';
+  let linkType = filterType == 'movies' ? 'movie' + questionSymbol : 'tv' + questionSymbol;
+
+  return linkType;
+}
+
+function getUrl(selectedOptions, filter) {
+  let url = '';
+
+  let linkType = getLinkType(true);
+
+  switch (filter) {
+    case 'year':
+      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=50&primary_release_year=' + selectedOPtion;
+      break;
+    case 'raiting':
+      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=50&vote_average.lte=' + selectedOPtion;
+      break;
+    case 'genres':
+      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=50&with_genres=' + selectedOptions;
+      break;
+  }
+
+  return url;
 }
 
 
