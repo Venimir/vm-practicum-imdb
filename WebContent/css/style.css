@@ -311,3 +311,8 @@ ul.list li {
 .overview {
 	text-align: center;
 }
+
+.card {
+ width: 23rem;
+ height: 20rem;
+}
