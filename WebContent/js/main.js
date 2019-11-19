@@ -14,10 +14,12 @@ $(function () {
   });
 
   $('.filter-year').on('change', sortBy);
-
   $('.filter-imdbRaiting').on('change', sortBy);
-
   $('.selectpicker').on('change', saveSelectedGenres);
+  $('#clear-filters').on('click', () => {
+    clearFilters();
+  });
+
 
   $(document).on('click ', '#search-button', getImdbData);
 
@@ -25,6 +27,8 @@ $(function () {
   populateSelectYearsRaiting();
   populateFilterGenres();
 });
+
+
 // END Document Ready
 
 var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
@@ -51,9 +55,8 @@ function getImdbData() {
 
   $('.posters-container ul.view-as').html('');
 
-  $.getJSON(urlmoviedb, function(response) {
-    console.log(response);
-    
+  $.getJSON(urlmoviedb, function (response) {
+
     if (response) {
       let data = response.results;
 
@@ -69,6 +72,7 @@ function getImdbData() {
       }
     }
   });
+  clearFilters();
 }
 
 function getDataById(object, callback, filterBySeason = null) {
@@ -88,17 +92,17 @@ function getDataById(object, callback, filterBySeason = null) {
 }
 
 function filterBySeason(object, tvSeasonNumber) {
-   getDataById(object, function(response) {
+  getDataById(object, function (response) {
     console.log(response);
     let episodes = response.episodes;
-     episodes.forEach(function(object) {
-       getEpisodesCard(object); 
-     });
+    episodes.forEach(function (object) {
+      getEpisodesCard(object);
+    });
   }, tvSeasonNumber);
 }
 
 function fillThePosterCardHtml(object) {
- getMovieCardDiv(object);
+  getMovieCardDiv(object);
 }
 
 function changeFilters() {
@@ -112,6 +116,7 @@ function changeFilters() {
     $('#tv-series-filters').addClass('hidden');
     $('#movie-filters').removeClass('hidden');
   }
+  clearFilters();
 }
 
 function handleMovieTitle(title, maxLength) {
@@ -127,7 +132,7 @@ function handleMovieTitle(title, maxLength) {
 
 function populateSelectYearsRaiting(years = false) {
 
-  let html = '<option selected>Choose...</option>';
+  let html = '<option value="0">Choose...</option>';
   let iStart = ''
   let iEnd = '';
   let selectClass = '';
@@ -167,14 +172,16 @@ function populateFilterGenres() {
 
 function saveSelectedGenres() {
   selectedGenres = $(this).val();
-  
+
   console.log(selectedGenres);
 }
 
 function sortBy() {
-
   let selectedOption = $(this).val();
   let filter = '';
+  let firstClass = $(this).attr('class').split(' ')[0];
+  clearFilters(firstClass);
+  $('.posters-container ul.view-as').html('');
 
   if ($(this).hasClass('filter-year')) {
     filter = 'year';
@@ -186,12 +193,9 @@ function sortBy() {
 
   let url = getUrl(selectedOption, filter);
 
-  console.log(url);
-  console.log(selectedOption);
-
-  $.getJSON(url, function(response) {
+  $.getJSON(url, function (response) {
     let data = response.results;
-    data.forEach(function(object) {
+    data.forEach(function (object) {
       getMovieCardDiv(object);
     });
   });
@@ -217,7 +221,7 @@ function getUrl(selectedOptions, filter) {
       url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&primary_release_year=' + selectedOptions;
       break;
     case 'raiting':
-      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&vote_average.lte=' + selectedOptions;
+      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&vote_average.gte=' + selectedOptions;
       break;
     case 'genres':
       url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&with_genres=' + selectedOptions;
@@ -227,15 +231,24 @@ function getUrl(selectedOptions, filter) {
   return url;
 }
 
-function clearFilters() {
-  let activeTab = $('.navbar-nav').find('li.active');
-  if (activeTab.attr('id') == 'movies') {
-    console.log('inside');
-     $('#movieTitle').val('');
-     $('select').val(0);
-     $('.selectpicker').selectpicker('refresh');
+function clearFilters(filterType = '') {
+  if (filterType) {
+    if (filterType == 'filter-year') {
+      $('.filter-imdbRaiting').val(0);
+    } 
+    else {
+      $('.filter-year').val(0);
+    } 
+  } else {
+    $('.filter-imdbRaiting').val(0);
+    $('.filter-year').val(0);
   }
-  }
+
+  $('#movieTitle').val('');
+  $('#tvSerieTitle').val('');
+  $('#tvSerieSeason').val('');
+  $('.selectpicker').val('default').selectpicker("refresh");
+}
 
 
 

@@ -1,4 +1,4 @@
-var array = [1, 2, 3, 4, 5, 6, 7];
+
 
 function getMovieCardDiv(object) {
 
@@ -9,9 +9,8 @@ function getMovieCardDiv(object) {
     getDataById(object, function (response) {
         if (response) {
             imdbId = response.imdb_id;
-            console.log(imdbId);
             let handledMovieTitle = handleMovieTitle(title, 42);
-            let handleMovieOverview = handleMovieTitle(object.overview, 280);
+            let handleMovieOverview = handleMovieTitle(object.overview, 270);
             let linkToImdbSite = imdbId ? 'https://www.imdb.com/title/' + imdbId : '#';
 
             let movieContainer = '<li>' +
@@ -37,7 +36,7 @@ function getMovieCardDiv(object) {
                 '<th>Imdb Raiting</th>' +
                 '</tr>' +
                 '<tr>' +
-                '<td>' + year + '</td>' +
+                '<td>' + dateFormat(new Date(year), 'mmmm d, yyyy') + '</td>' +  
                 '<td>' +
                 '<div class="imdbRatingStyle">' +
                 '<span>' +
@@ -58,7 +57,7 @@ function getMovieCardDiv(object) {
                 '<tr class="tr-head">' +
                 '<th colspan="2">Movie Overview</th>' +
                 '</tr>' +
-                '<tr class="overview" title="' + handleMovieOverview + '">' +
+                '<tr class="overview" title="' + object.overview + '">' +
                 '<td class="overview" colspan="2">' + handleMovieOverview + '</td>' +
                 '</tr>' +
                 '</table>' +
@@ -81,6 +80,7 @@ let episodeCardDiv = '<li>' +
 '<div class="card text-white bg-dark mb-3">' +
 '<div class="card-header">Season ' + object.season_number + ' Episode '+ object.episode_number +'</div>' +
 '<div class="card-body">' +
+  '<h6>' + dateFormat(new Date(object.first_air_date, 'mmmm d, yyyy'))  + '</h6>' +
   '<h5 class="card-title">Episode Name</h5>' +
   '<h4>'+ handledEpisodeTitle +'</h4>' +
   '<p class="card-text">'+ handleEpisodeOverview +'</p>' +
