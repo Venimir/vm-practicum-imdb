@@ -227,6 +227,16 @@ function getUrl(selectedOptions, filter) {
   return url;
 }
 
+function clearFilters() {
+  let activeTab = $('.navbar-nav').find('li.active');
+  if (activeTab.attr('id') == 'movies') {
+    console.log('inside');
+     $('#movieTitle').val('');
+     $('select').val(0);
+     $('.selectpicker').selectpicker('refresh');
+  }
+  }
+
 
 
 
