@@ -59,6 +59,8 @@ function getImdbData() {
 
     if (response) {
       let data = response.results;
+      console.log(data);
+      
 
       for (let object of data) {
         if (tvSeasonNumber) {
@@ -121,10 +123,13 @@ function changeFilters() {
 
 function handleMovieTitle(title, maxLength) {
   let max = maxLength;
-  let tot, str;
+  let tot, str; 
 
   str = typeof title !== "undefined" ? title : '';
   tot = str.length;
+
+  tot >= 35 ? $('.title-movie').css('font-size', '1.10rem') : '';
+  
   str = (tot <= max) ? str : str.substring(0, (max + 1)) + "...";
 
   return str;

@@ -9,7 +9,7 @@ function getMovieCardDiv(object) {
     getDataById(object, function (response) {
         if (response) {
             imdbId = response.imdb_id;
-            let handledMovieTitle = handleMovieTitle(title, 42);
+            let handledMovieTitle = handleMovieTitle(title, 35);
             let handleMovieOverview = handleMovieTitle(object.overview, 270);
             let linkToImdbSite = imdbId ? 'https://www.imdb.com/title/' + imdbId : '#';
 
@@ -24,6 +24,7 @@ function getMovieCardDiv(object) {
                 '<div class="bottom">' +
                 '<div class="details"  title="' + handledMovieTitle + '">' +
                 '<h5 class="title-movie">' + handledMovieTitle + '</h5>' +
+                '<p class="p-Year">' +  dateFormat(new Date(year), 'mmmm d, yyyy') + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -32,7 +33,7 @@ function getMovieCardDiv(object) {
                 '<div class="contents">' +
                 '<table>' +
                 '<tr class="tr-head">' +
-                '<th>Year</th>' +
+                '<th>Release Date</th>' +
                 '<th>Imdb Raiting</th>' +
                 '</tr>' +
                 '<tr>' +
