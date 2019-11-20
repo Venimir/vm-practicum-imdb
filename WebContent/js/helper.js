@@ -9,16 +9,17 @@ function getMovieCardDiv(object) {
     getDataById(object, function (response) {
         if (response) {
             imdbId = response.imdb_id;
+            
             let handledMovieTitle = handleMovieTitle(title, 35);
             let handleMovieOverview = handleMovieTitle(object.overview, 270);
             let linkToImdbSite = imdbId ? 'https://www.imdb.com/title/' + imdbId : '#';
-
+            let poster =  object.poster_path ? 'http://image.tmdb.org/t/p/w185' + object.poster_path : 'images/poster_not_available.jpg';
             let movieContainer = '<li>' +
                 '<div class="wrapper">' +
                 '<div class="container">' +
                 '<div class="top">' +
                 '<a href="' + linkToImdbSite + '" target="_blank">' +
-                '<img src="http://image.tmdb.org/t/p/w185' + object.poster_path + '" alt="">' +
+                '<img src="' + poster + '" alt="">' +
                 '</a>' +
                 '</div>' +
                 '<div class="bottom">' +
@@ -74,17 +75,16 @@ function getMovieCardDiv(object) {
 
 function getEpisodesCard(object) {
 let handledEpisodeTitle = handleMovieTitle(object.name, 42);
-let handleEpisodeOverview = handleMovieTitle(object.overview, 200);
-
-
+let handleEpisodeOverview = handleMovieTitle(object.overview, 240);
+let firstAirDate = object.first_air_date ? object.first_air_date : object.air_date;
 let episodeCardDiv = '<li>' +
 '<div class="card text-white bg-dark mb-3">' +
 '<div class="card-header">Season ' + object.season_number + ' Episode '+ object.episode_number +'</div>' +
 '<div class="card-body">' +
-  '<h6>' + dateFormat(new Date(object.first_air_date, 'mmmm d, yyyy'))  + '</h6>' +
-  '<h5 class="card-title">Episode Name</h5>' +
+  '<h6>Release Date: ' + dateFormat(new Date(Date.parse(firstAirDate)), 'mmmm d, yyyy')  + '</h6>' +
+  '<h6 class="card-title">Episode Name:</h6>' +
   '<h4>'+ handledEpisodeTitle +'</h4>' +
-  '<p class="card-text">'+ handleEpisodeOverview +'</p>' +
+  '<p class="card-text" title="'+ object.overview +'">'+ handleEpisodeOverview +'</p>' +
 '</div>'+
 '</div>' +
 '</li>';

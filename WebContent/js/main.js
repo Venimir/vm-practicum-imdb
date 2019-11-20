@@ -48,7 +48,6 @@ function getImdbData() {
 
   if (selectedGenres.length > 0) {
     let handledSelectedGenres = selectedGenres.join(',');
-    console.log(handledSelectedGenres);
     urlmoviedb = getUrl(handledSelectedGenres, 'genres');
   }
   console.log(urlmoviedb);
@@ -59,9 +58,7 @@ function getImdbData() {
 
     if (response) {
       let data = response.results;
-      console.log(data);
-      
-
+    
       for (let object of data) {
         if (tvSeasonNumber) {
           filterBySeason(object, tvSeasonNumber);
@@ -87,7 +84,6 @@ function getDataById(object, callback, filterBySeason = null) {
   }
 
   $.getJSON(url).done(function (response) {
-    // console.log(response);
     data = response;
     callback(data);
   });
@@ -95,7 +91,6 @@ function getDataById(object, callback, filterBySeason = null) {
 
 function filterBySeason(object, tvSeasonNumber) {
   getDataById(object, function (response) {
-    console.log(response);
     let episodes = response.episodes;
     episodes.forEach(function (object) {
       getEpisodesCard(object);
@@ -177,8 +172,6 @@ function populateFilterGenres() {
 
 function saveSelectedGenres() {
   selectedGenres = $(this).val();
-
-  console.log(selectedGenres);
 }
 
 function sortBy() {
@@ -200,6 +193,7 @@ function sortBy() {
 
   $.getJSON(url, function (response) {
     let data = response.results;
+
     data.forEach(function (object) {
       getMovieCardDiv(object);
     });
@@ -218,15 +212,20 @@ function getLinkType(symbol = false) {
 
 function getUrl(selectedOptions, filter) {
   let url = '';
-
   let linkType = getLinkType(true);
+  console.log('linkType is ', linkType);
+  
+  let releaseDate = linkType == 'movie?' ? 'primary_release_year' : 'first_air_date_year';
+  console.log('releaseDate is ', releaseDate);
+  console.log('selectedOptions is ', selectedOptions);
+  
 
   switch (filter) {
     case 'year':
-      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&primary_release_year=' + selectedOptions;
+      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&include_adult=false&include_video=false&' + releaseDate + '=' + selectedOptions;
       break;
     case 'raiting':
-      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&vote_average.gte=' + selectedOptions;
+      url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=vote_count.desc&include_adult=false&include_video=false&vote_average.lte=' + selectedOptions;
       break;
     case 'genres':
       url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&with_genres=' + selectedOptions;
@@ -237,6 +236,8 @@ function getUrl(selectedOptions, filter) {
 }
 
 function clearFilters(filterType = '') {
+  $('.posters-container ul.view-as').html('');
+
   if (filterType) {
     if (filterType == 'filter-year') {
       $('.filter-imdbRaiting').val(0);
