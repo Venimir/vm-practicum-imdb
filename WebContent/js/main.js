@@ -43,8 +43,8 @@ function getImdbData() {
   let handledTitle = '&query=' + stringTitle;
   let tvSeasonNumber = $('#tvSerieSeason').val();
   let linkType = getLinkType(true);
-  let pageResults = linkType == 'tv?' && tvSeasonNumber ? '&page=1' : '';
-  let urlmoviedb = 'https://api.themoviedb.org/3/search/' + linkType + apiKeyMovieDb + handledTitle + pageResults;
+  // let pageResults = linkType == 'tv?' && tvSeasonNumber ? '&page=1' : '';
+  let urlmoviedb = 'https://api.themoviedb.org/3/search/' + linkType + apiKeyMovieDb + handledTitle;
 
   if (selectedGenres.length > 0) {
     let handledSelectedGenres = selectedGenres.join(',');
