@@ -174,9 +174,9 @@ ul.list li {
 .wrapper .container .top {
 	height: 80%;
 	width: 100%;
-	box-shadow: 1px 9px 11px 4px rgba(0, 0, 0, 0.75);
-   -webkit-box-shadow: 0px -3px 17px 3px rgba(0,0,0,0.72);
-   -moz-box-shadow: 0px -3px 17px 3px rgba(0,0,0,0.72);
+   -webkit-box-shadow: 0px 9px 12px 8px rgba(0,0,0,0.75);
+   -moz-box-shadow: 0px 9px 12px 8px rgba(0,0,0,0.75);
+   box-shadow: 0px 9px 12px 8px rgba(0,0,0,0.75);
 }
 
 .wrapper .container .top img {
@@ -188,7 +188,7 @@ ul.list li {
 	/* border-top: 1px solid #272727; */
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
-	background: #131313;
+	background: #222222;
 	color: rgb(209, 209, 209);
 	width: 100%;
 	height: 20%;
@@ -215,7 +215,7 @@ ul.list li {
 
 .wrapper .inside {
 	z-index: 9;
-	background: rgb(20, 20, 20);
+	background: rgb(41, 41, 41);
 	width: 120px;
 	height: 140px;
 	position: absolute;
@@ -238,7 +238,7 @@ ul.list li {
 	margin-right: 10px;
 	margin-top: 6px;
 	opacity: 0.9;
-	width: 93%;
+	width: 93.5%;
 	right: 0;
 	top: 0;
 	border-radius: 0;
@@ -313,6 +313,19 @@ ul.list li {
 
 .overview {
 	text-align: center;
+}
+
+.genre-names {
+	text-align: center;
+}
+
+.table-row-header {
+	color: rgb(245, 197, 24);
+	
+}
+
+.star {
+	margin-bottom: 3px;
 }
 
 .card {

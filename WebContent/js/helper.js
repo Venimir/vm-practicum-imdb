@@ -5,6 +5,15 @@ function getMovieCardDiv(object) {
     let title = object.title ? object.title : object.name;
     let year = object.release_date ? object.release_date : object.first_air_date;
     let imdbId = '';
+    let genreNames = '';
+    
+    object.genre_ids.forEach((index) => {
+        if ($.inArray(index, genres)) {
+            genreNames += genres[index] + ' ';
+        }
+    });
+    
+    
 
     getDataById(object, function (response) {
         if (response) {
@@ -34,8 +43,8 @@ function getMovieCardDiv(object) {
                 '<div class="contents">' +
                 '<table>' +
                 '<tr class="tr-head">' +
-                '<th>Release Date</th>' +
-                '<th>Imdb Raiting</th>' +
+                '<th class="table-row-header">Release Date</th>' +
+                '<th class="table-row-header">Imdb Raiting</th>' +
                 '</tr>' +
                 '<tr>' +
                 '<td>' + dateFormat(new Date(year), 'mmmm d, yyyy') + '</td>' +  
@@ -44,20 +53,19 @@ function getMovieCardDiv(object) {
                 '<span>' +
                 '<img src="https://ia.media-imdb.com/images/G/01/imdb/plugins/rating/images/imdb_38x18.png" alt=""/>' +
                 '<span class="rating">' + object.vote_average + '<span class="ofTen">/10</span></span>' +
+                '<img src="https://ia.media-imdb.com/images/G/01/imdb/plugins/rating/images/imdb_star_17x17.png" class="star">' +
                 '</span>' +
                 '</div>' +
                 '</td>' +
                 '</tr>' +
                 '<tr class="tr-head">' +
-                '<th>Something</th>' +
-                '<th>Something</th>' +
+                '<th class="table-row-header" colspan="2">Genres</th>' +
                 '</tr>' +
-                '<tr>' +
-                '<td>200mm</td>' +
-                '<td>200mm</td>' +
+                '<tr class="genre-names">' +
+                '<td class="genre-names" colspan="2">'+ genreNames +'</td>' +
                 '</tr>' +
                 '<tr class="tr-head">' +
-                '<th colspan="2">Movie Overview</th>' +
+                '<th class="table-row-header" colspan="2">Movie Overview</th>' +
                 '</tr>' +
                 '<tr class="overview" title="' + object.overview + '">' +
                 '<td class="overview" colspan="2">' + handleMovieOverview + '</td>' +

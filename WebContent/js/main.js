@@ -32,7 +32,12 @@ $(function () {
 // END Document Ready
 
 var apiKeyMovieDb = 'api_key=2ec82d3fc6c5da1102cd5979cf39b152';
+var genres = [];
+console.log(genres);
+
 var selectedGenres = [];
+
+
 
 function getImdbData() {
   let titleMovie = $('#movieTitle').val();
@@ -43,7 +48,6 @@ function getImdbData() {
   let handledTitle = '&query=' + stringTitle;
   let tvSeasonNumber = $('#tvSerieSeason').val();
   let linkType = getLinkType(true);
-  // let pageResults = linkType == 'tv?' && tvSeasonNumber ? '&page=1' : '';
   let urlmoviedb = 'https://api.themoviedb.org/3/search/' + linkType + apiKeyMovieDb + handledTitle;
 
   if (selectedGenres.length > 0) {
@@ -159,10 +163,11 @@ function populateFilterGenres() {
   let url = 'https://api.themoviedb.org/3/genre/movie/list?api_key=2ec82d3fc6c5da1102cd5979cf39b152&language=en-US';
   $.getJSON(url, (response) => {
     let data = response.genres;
-    data.forEach((object, index) => {
+    data.forEach((object) => {
       html += '<option value="' + object.id + '">' + object.name + '</option>';
+      genres[object.id] = object.name;
     });
-
+    
     $('.selectpicker').html(html);
 
     $('.selectpicker').selectpicker('refresh');
@@ -193,7 +198,7 @@ function sortBy() {
 
   $.getJSON(url, function (response) {
     let data = response.results;
-
+    
     data.forEach(function (object) {
       getMovieCardDiv(object);
     });
@@ -213,13 +218,8 @@ function getLinkType(symbol = false) {
 function getUrl(selectedOptions, filter) {
   let url = '';
   let linkType = getLinkType(true);
-  console.log('linkType is ', linkType);
-  
   let releaseDate = linkType == 'movie?' ? 'primary_release_year' : 'first_air_date_year';
-  console.log('releaseDate is ', releaseDate);
-  console.log('selectedOptions is ', selectedOptions);
   
-
   switch (filter) {
     case 'year':
       url = 'https://api.themoviedb.org/3/discover/' + linkType + apiKeyMovieDb + '&language=en-US&include_adult=false&include_video=false&' + releaseDate + '=' + selectedOptions;
